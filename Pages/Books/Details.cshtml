@@ -36,6 +36,21 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Book.PublishingDate)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.BookCategories)
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                if (Model.Book.BookCategories != null)
+                {
+                    foreach (var category in Model.Book.BookCategories)
+                    {
+                        // Numele Categoriei, similar cu Index.cshtml [cite: 514]
+                         @category.Category.CategoryName <br/> 
+                    }
+                }
+            }
+        </dd>
     </dl>
 </div>
 <div>

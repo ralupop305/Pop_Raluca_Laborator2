@@ -33,7 +33,7 @@ namespace Pop_Raluca_Laborator2.Pages.Books
                 .Include(b => b.Author) // Includerea autorului (dacă e necesar)
                 .Include(b => b.Publisher) // Includerea editurii
                 .Include(b => b.BookCategories) // Includerea entităților intermediare
-                .ThenInclude(bc => bc.Category) // Includerea detaliilor categoriei
+                    .ThenInclude(bc => bc.Category) // Includerea detaliilor categoriei
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (Book == null)

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Pop_Raluca_Laborator2.Data;
 using Pop_Raluca_Laborator2.Models;
 
-namespace Pop_Raluca_Laborator2.Pages.Books
+namespace Pop_Raluca_Laborator2.Pages.Categories
 {
     public class DetailsModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace Pop_Raluca_Laborator2.Pages.Books
             _context = context;
         }
 
-        public Book Book { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,17 +28,14 @@ namespace Pop_Raluca_Laborator2.Pages.Books
                 return NotFound();
             }
 
-            Book = await _context.Book
-              // Se presupune că Author și Publisher sunt deja incluse
-                .Include(b => b.Author) // Includerea autorului (dacă e necesar)
-                .Include(b => b.Publisher) // Includerea editurii
-                .Include(b => b.BookCategories) // Includerea entităților intermediare
-                .ThenInclude(bc => bc.Category) // Includerea detaliilor categoriei
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (Book == null)
+            var category = await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
+            if (category == null)
             {
                 return NotFound();
+            }
+            else
+            {
+                Category = category;
             }
             return Page();
         }

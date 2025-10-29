@@ -19,7 +19,7 @@ namespace Pop_Raluca_Laborator2.Pages.Books
             _context = context;
         }
 
-        public IList<Book> Book { get;set; } = default!;
+        public IList<Book> Book { get; set; } = default!;
         public BookData BookD { get; set; }
         public int BookID { get; set; }
         public int CategoryID { get; set; }
@@ -30,51 +30,55 @@ namespace Pop_Raluca_Laborator2.Pages.Books
         public async Task OnGetAsync(int? id, int? categoryID, string sortOrder, string searchString)
         {
             BookD = new BookData();
-
-            // using System;
-            TitleSort = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            TitleSort = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             AuthorSort = sortOrder == "author" ? "author_desc" : "author";
-
             CurrentFilter = searchString;
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                BookD.Books = BookD.Books.Where(s => s.Author.FirstName.Contains(searchString)
-
-                    || s.Author.LastName.Contains(searchString)
-                    || s.Title.Contains(searchString));
-
-                BookD.Books = await _context.Book
+            // start query
+            var booksQuery = _context.Book
                 .Include(b => b.Publisher)
                 .Include(b => b.Author)
-                .Include(b => b.BookCategories)
-                    .ThenInclude(b => b.Category)
-                .AsNoTracking()
-                .OrderBy(b => b.Title)
-                .ToListAsync();
+                .Include(b => b.BookCategories).ThenInclude(bc => bc.Category)
+                .AsNoTracking();
+
+            // apply search filter if provided
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                booksQuery = booksQuery.Where(s =>
+                    s.Author.FirstName.Contains(searchString) ||
+                    s.Author.LastName.Contains(searchString) ||
+                    s.Title.Contains(searchString));
+            }
+
+            // apply sorting
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    booksQuery = booksQuery.OrderByDescending(b => b.Title);
+                    break;
+                case "author_desc":
+                    booksQuery = booksQuery.OrderByDescending(b => b.Author.FullName);
+                    break;
+                case "author":
+                    booksQuery = booksQuery.OrderBy(b => b.Author.FullName);
+                    break;
+                default:
+                    booksQuery = booksQuery.OrderBy(b => b.Title);
+                    break;
+            }
+            // materialize once
+            var booksList = await booksQuery.ToListAsync();
+            BookD.Books = booksList;
+            Book = booksList; // ensures Model.Book[0] usage in the view is safe when list non-empty
 
             if (id != null)
             {
                 BookID = id.Value;
-                Book book = BookD.Books
-                    .Where(i => i.ID == id.Value).Single();
-                BookD.Categories = book.BookCategories.Select(s => s.Category);
-            }
-            switch (sortOrder)
-            {
-                case "title_desc":
-                    BookD.Books = BookD.Books.OrderByDescending(s => s.Title);
-                    break;
-                case "author_desc":
-                    BookD.Books = BookD.Books.OrderByDescending(s => s.Author.FullName);
-                    break;
-                case "author":
-                    BookD.Books = BookD.Books.OrderBy(s => s.Author.FullName);
-                    break;
-                default:
-                    BookD.Books = BookD.Books.OrderBy(s => s.Title);
-                    break;
-            }
+                var book = BookD.Books.Where(i => i.ID == id.Value).SingleOrDefault();
+                if (book != null)
+                    BookD.Categories = book.BookCategories.Select(s => s.Category);
             }
         }
+
+    }
 }

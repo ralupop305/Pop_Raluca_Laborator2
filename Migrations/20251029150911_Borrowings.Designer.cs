@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pop_Raluca_Laborator2.Data;
 
@@ -11,9 +12,11 @@ using Pop_Raluca_Laborator2.Data;
 namespace Pop_Raluca_Laborator2.Migrations
 {
     [DbContext(typeof(Pop_Raluca_Laborator2Context))]
-    partial class Pop_Raluca_Laborator2ContextModelSnapshot : ModelSnapshot
+    [Migration("20251029150911_Borrowings")]
+    partial class Borrowings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

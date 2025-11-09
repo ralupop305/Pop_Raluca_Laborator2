@@ -12,16 +12,16 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Borrowing.Member)
+            Membru
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.Member.ID)
+            @($"{Model.Borrowing.Member.FirstName} {Model.Borrowing.Member.LastName}")
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Borrowing.Book)
+            Carte
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.Book.ID)
+            @Html.DisplayFor(model => model.Borrowing.Book.Title)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Borrowing.ReturnDate)

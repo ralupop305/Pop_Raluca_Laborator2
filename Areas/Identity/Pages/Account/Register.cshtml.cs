@@ -134,6 +134,9 @@ namespace Pop_Raluca_Laborator2.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    Member.Email = Input.Email;
+                    _context.Member.Add(Member);
+                    await _context.SaveChangesAsync();
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

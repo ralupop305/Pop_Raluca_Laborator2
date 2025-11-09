@@ -12,17 +12,13 @@
     <h4>Borrowing</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Borrowing.Member)
-        </dt>
+        <dt class="col-sm-2">Membru</dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.Member.ID)
+            @($"{Model.Borrowing.Member.FirstName} {Model.Borrowing.Member.LastName}")
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Borrowing.Book)
-        </dt>
+        <dt class="col-sm-2">Carte</dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Borrowing.Book.ID)
+            @Html.DisplayFor(model => model.Borrowing.Book.Title)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Borrowing.ReturnDate)
